@@ -26,3 +26,6 @@ class Hyperparameters:
     pta_dev_num = 5000
     pta_epochs = 315
     pta_batch_size = 512
+
+
+    gpu = True

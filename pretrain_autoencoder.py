@@ -20,6 +20,9 @@ def train(inputs):
     total_num = 0
 
     for input in inputs:
+
+        input = input.to(device)
+        
         encoder.zero_grad()
         decoder.zero_grad()
 
@@ -46,6 +49,9 @@ def test(inputs):
     total_loss = 0
     total_num = 0
     for input in inputs:
+
+        input = input.to(device)
+
         encoder.zero_grad()
         decoder.zero_grad()
 
@@ -64,6 +70,10 @@ def test(inputs):
 
 
 if __name__ == '__main__':
+
+    # Checking the usage of GPU
+    device = torch.device("cuda:0" if torch.cuda.is_available() and hp.gpu else "cpu")
+
     
     # Preparing the data
     print("Loading word embeddings")
@@ -79,6 +89,9 @@ if __name__ == '__main__':
     # Loading the models
     encoder = Encoder(hp.embedding_dim, hp.hidden_dim, hp.latent_dim)
     decoder = Decoder(hp.latent_dim, hp.hidden_dim, hp.embedding_dim)
+
+    encoder.to(device)
+    decoder.to(device)
 
     encoder_optimizer = utils.make_optim(encoder, hp.pta_optimizer, hp.pta_learning_rate, hp.pta_lr_decay, hp.pta_max_grad_norm)
     decoder_optimizer = utils.make_optim(decoder, hp.pta_optimizer, hp.pta_learning_rate, hp.pta_lr_decay, hp.pta_max_grad_norm)
